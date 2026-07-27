@@ -1,8 +1,13 @@
 import { AnimatePresence, motion } from "framer-motion";
-import { CheckCircle2, X } from "lucide-react";
+import {
+    CheckCircle2,
+    LoaderCircle,
+    X,
+} from "lucide-react";
 
 const UploadConfirmModal = ({
     open,
+    uploading,
     onClose,
     onConfirm,
 }) => {
@@ -10,16 +15,19 @@ const UploadConfirmModal = ({
         <AnimatePresence>
 
             {open && (
-
                 <>
-                    {/* Overlay */}
+                    {/* OVERLAY */}
 
                     <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         transition={{ duration: 0.2 }}
-                        onClick={onClose}
+                        onClick={
+                            uploading
+                                ? undefined
+                                : onClose
+                        }
                         className="
                             fixed
                             inset-0
@@ -29,7 +37,7 @@ const UploadConfirmModal = ({
                         "
                     />
 
-                    {/* Bottom Sheet */}
+                    {/* BOTTOM SHEET */}
 
                     <motion.div
                         initial={{ y: "100%" }}
@@ -55,9 +63,18 @@ const UploadConfirmModal = ({
                         "
                     >
 
-                        {/* Handle */}
+                        {/* HANDLE */}
 
-                        <div className="mx-auto mb-8 h-1.5 w-14 rounded-full bg-[#D8CCBF]" />
+                        <div
+                            className="
+                                mx-auto
+                                mb-8
+                                h-1.5
+                                w-14
+                                rounded-full
+                                bg-[#D8CCBF]
+                            "
+                        />
 
                         <div className="flex justify-center">
 
@@ -69,11 +86,26 @@ const UploadConfirmModal = ({
 
                         </div>
 
-                        <h2 className="mt-6 text-center font-heading text-3xl text-[#3A312B]">
+                        <h2
+                            className="
+                                mt-6
+                                text-center
+                                font-heading
+                                text-3xl
+                                text-[#3A312B]
+                            "
+                        >
                             Gotowe do wysłania
                         </h2>
 
-                        <p className="mt-4 text-center leading-7 text-[#6F6255]">
+                        <p
+                            className="
+                                mt-4
+                                text-center
+                                leading-7
+                                text-[#6F6255]
+                            "
+                        >
                             Czy na pewno chcesz
                             <br />
                             przesłać to zdjęcie?
@@ -82,9 +114,15 @@ const UploadConfirmModal = ({
                         <div className="mt-10 space-y-3">
 
                             <button
+                                type="button"
                                 onClick={onConfirm}
+                                disabled={uploading}
                                 className="
+                                    flex
                                     w-full
+                                    items-center
+                                    justify-center
+                                    gap-2
                                     rounded-2xl
                                     bg-[#B89B7A]
                                     py-4
@@ -92,13 +130,28 @@ const UploadConfirmModal = ({
                                     text-white
                                     transition
                                     active:scale-95
+                                    disabled:cursor-not-allowed
+                                    disabled:opacity-60
                                 "
                             >
-                                Dodaj zdjęcie
+                                {uploading ? (
+                                    <>
+                                        <LoaderCircle
+                                            size={20}
+                                            className="animate-spin"
+                                        />
+
+                                        Wysyłanie...
+                                    </>
+                                ) : (
+                                    "Dodaj zdjęcie"
+                                )}
                             </button>
 
                             <button
+                                type="button"
                                 onClick={onClose}
+                                disabled={uploading}
                                 className="
                                     flex
                                     w-full
@@ -111,20 +164,18 @@ const UploadConfirmModal = ({
                                     py-4
                                     transition
                                     active:scale-95
+                                    disabled:opacity-50
                                 "
                             >
                                 <X size={18} />
 
                                 Anuluj
-
                             </button>
 
                         </div>
 
                     </motion.div>
-
                 </>
-
             )}
 
         </AnimatePresence>

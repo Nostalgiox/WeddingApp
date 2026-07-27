@@ -6,12 +6,13 @@ import MobileMenu from "../components/navbar/MobileMenu";
 import MissionsHeader from "../components/missions/MissionsHeader";
 import MissionBoard from "../components/missions/MissionBoard";
 
-const MissionsPage = () => {
+import MainLayout from "../layouts/MainLayout";
 
+const MissionsPage = () => {
     const [menuOpen, setMenuOpen] = useState(false);
 
     return (
-        <main className="min-h-screen bg-[#F8F6F3]">
+        <MainLayout>
 
             <Navbar
                 isOpen={menuOpen}
@@ -27,7 +28,7 @@ const MissionsPage = () => {
 
             <MissionBoard />
 
-        </main>
+        </MainLayout>
     );
 };
 

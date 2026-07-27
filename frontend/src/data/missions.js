@@ -4,14 +4,14 @@ export const missions = [
         title: "Pierwszy taniec",
         icon: "💃",
         requiredPhotos: 5,
-        currentPhotos: 0,
+        currentPhotos: 3,
     },
     {
         id: 2,
         title: "Tort weselny",
         icon: "🎂",
         requiredPhotos: 3,
-        currentPhotos: 0,
+        currentPhotos: 1,
     },
     {
         id: 3,
@@ -67,7 +67,7 @@ export const missions = [
         title: "Przyjaciele",
         icon: "❤️",
         requiredPhotos: 6,
-        currentPhotos: 0,
+        currentPhotos: 6,
     },
     {
         id: 11,

@@ -1,8 +1,16 @@
+import Footer from "../components/footer/Footer";
+
 const MainLayout = ({ children }) => {
     return (
-        <main className="min-h-screen bg-[#F8F6F3]">
-            {children}
-        </main>
+        <div className="flex min-h-screen flex-col bg-[#F8F6F3]">
+
+            <main className="flex-1">
+                {children}
+            </main>
+
+            <Footer />
+
+        </div>
     );
 };
 

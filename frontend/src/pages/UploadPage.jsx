@@ -5,13 +5,13 @@ import MobileMenu from "../components/navbar/MobileMenu";
 
 import UploadHeader from "../components/upload/UploadHeader";
 import UploadDropzone from "../components/upload/UploadDropzone";
-
+import MainLayout from "../layouts/MainLayout";
 const UploadPage = () => {
 
     const [menuOpen, setMenuOpen] = useState(false);
 
     return (
-        <main className="min-h-screen bg-[#F8F6F3]">
+        <MainLayout>
 
             <Navbar
                 isOpen={menuOpen}
@@ -27,7 +27,7 @@ const UploadPage = () => {
 
             <UploadDropzone />
 
-        </main>
+        </MainLayout>
     );
 };
 

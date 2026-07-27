@@ -1,7 +1,26 @@
+# Python / Django
 venv/
-node_modules/
-dist/
-media/
-.env
+.venv/
 __pycache__/
 *.pyc
+media/
+
+# React / Vite
+node_modules/
+dist/
+
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# Database
+db.sqlite3
+
+# IDE
+.vscode/
+.idea/
+
+# System
+.DS_Store
+Thumbs.db

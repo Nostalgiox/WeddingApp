@@ -8,7 +8,7 @@ const Footer = () => {
                 border-[#E8DDD2]
                 bg-[#F8F6F3]
                 px-6
-                py-14
+                py-8
                 text-center
             "
         >
@@ -17,7 +17,7 @@ const Footer = () => {
                 <p
                     className="
                         font-heading
-                        text-3xl
+                        text-2xl
                         text-[#3A312B]
                     "
                 >
@@ -26,27 +26,27 @@ const Footer = () => {
 
                 <div
                     className="
-                        my-5
+                        my-3
                         flex
                         items-center
                         justify-center
                         gap-3
                     "
                 >
-                    <span className="h-px w-10 bg-[#D8CCBF]" />
+                    <span className="h-px w-8 bg-[#D8CCBF]" />
 
                     <Heart
-                        size={15}
+                        size={13}
                         strokeWidth={1.5}
                         className="text-[#B89B7A]"
                     />
 
-                    <span className="h-px w-10 bg-[#D8CCBF]" />
+                    <span className="h-px w-8 bg-[#D8CCBF]" />
                 </div>
 
                 <p
                     className="
-                        text-sm
+                        text-xs
                         tracking-[0.15em]
                         text-[#8B8075]
                     "

@@ -40,3 +40,18 @@ class Photo(models.Model):
             return f"Zdjęcie #{self.id} - {self.mission.title}"
 
         return f"Zdjęcie #{self.id}"
+
+class Wish(models.Model):
+    author = models.CharField(max_length=100, blank=True,)
+    content = models.TextField(max_length=2000,)
+    is_anonymous = models.BooleanField(default=False,)
+    is_visible = models.BooleanField(default=True,)
+    created_at = models.DateTimeField(auto_now_add=True,)
+
+    class Meta:
+        ordering = ["-created_at"]
+
+        def __str__(self):
+            if self.is_anonymous:
+                return f"Anonimowy gość - #{self.id}"
+            return f"{self.author} - #{self.id}"

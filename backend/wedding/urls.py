@@ -3,9 +3,12 @@ from django.urls import path
 from .views import (
     MissionListView,
     PhotoListCreateView,
+    WishListCreateView,
     AdminLoginView,
     AdminPhotoListView,
     AdminPhotoDetailView,
+    AdminWishListView,
+    AdminWishDetailView,
 )
 
 
@@ -24,6 +27,12 @@ urlpatterns = [
         "photos/",
         PhotoListCreateView.as_view(),
         name="photo-list-create",
+    ),
+
+    path(
+        "wishes/",
+        WishListCreateView.as_view(),
+        name="wish-list-create",
     ),
 
 
@@ -47,5 +56,16 @@ urlpatterns = [
         "admin/photos/<int:pk>/",
         AdminPhotoDetailView.as_view(),
         name="admin-photo-detail",
+    ),
+    path(
+        "admin/wishes/",
+        AdminWishListView.as_view(),
+        name="admin-wish-list",
+    ),
+
+    path(
+        "admin/wishes/<int:pk>/",
+        AdminWishDetailView.as_view(),
+        name="admin-wish-detail",
     ),
 ]

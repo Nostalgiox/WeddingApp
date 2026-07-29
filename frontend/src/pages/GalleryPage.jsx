@@ -25,9 +25,12 @@ const GalleryPage = () => {
     // POBIERANIE ZDJĘĆ
     // =========================
 
-    const fetchPhotos = async () => {
+    const fetchPhotos = async (silent = false) => {
         try {
-            setLoading(true);
+            if (!silent) {
+                setLoading(true);
+            }
+
             setError("");
 
             const response = await fetch(
@@ -42,7 +45,6 @@ const GalleryPage = () => {
 
             const data = await response.json();
 
-            // Najnowsze zdjęcia na początku
             const sortedPhotos = [...data].sort(
                 (a, b) => b.id - a.id
             );
@@ -52,16 +54,46 @@ const GalleryPage = () => {
         } catch (error) {
             console.error(error);
 
-            setError(
-                "Nie udało się załadować galerii."
-            );
+            if (!silent) {
+                setError(
+                    "Nie udało się załadować galerii."
+                );
+            }
         } finally {
-            setLoading(false);
+            if (!silent) {
+                setLoading(false);
+            }
         }
     };
 
     useEffect(() => {
         fetchPhotos();
+
+        const interval = setInterval(() => {
+            fetchPhotos(true);
+        }, 15000);
+
+        const handleVisibilityChange = () => {
+            if (
+                document.visibilityState === "visible"
+            ) {
+                fetchPhotos(true);
+            }
+        };
+
+        document.addEventListener(
+            "visibilitychange",
+            handleVisibilityChange
+        );
+
+        return () => {
+            clearInterval(interval);
+
+            document.removeEventListener(
+                "visibilitychange",
+                handleVisibilityChange
+            );
+        };
     }, []);
 
     // =========================
@@ -268,13 +300,9 @@ const GalleryPage = () => {
 
             <GalleryPreview
                 photo={selectedPhoto}
-                imageUrl={
-                    selectedPhoto
-                        ? getImageUrl(
-                            selectedPhoto.image
-                        )
-                        : ""
-                }
+                photos={photos}
+                getImageUrl={getImageUrl}
+                onChange={setSelectedPhoto}
                 onClose={() =>
                     setSelectedPhoto(null)
                 }

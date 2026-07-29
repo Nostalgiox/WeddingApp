@@ -13,6 +13,7 @@ import AdminPhotosPage from "../admin/pages/AdminPhotosPage";
 import AdminMissionsPage from "../admin/pages/AdminMissionsPage";
 import AdminLoginPage from "../admin/pages/AdminLoginPage";
 import ProtectedAdminRoute from "../admin/components/ProtectedAdminRoute";
+import AdminWishesPage from "../admin/pages/AdminWishesPage";
 
 const AppRouter = () => {
     return (
@@ -83,6 +84,11 @@ const AppRouter = () => {
                         <Route
                             path="missions"
                             element={<AdminMissionsPage />}
+                        />
+
+                        <Route
+                            path="wishes"
+                            element={<AdminWishesPage />}
                         />
 
                     </Route>

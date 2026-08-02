@@ -16,7 +16,7 @@ const MissionBoard = () => {
         try {
             setError(false);
 
-            const response = await fetch(`${API_URL}/api/missions`);
+            const response = await fetch(`${API_URL}/api/missions/`);
 
             if (!response.ok) {
                 throw new Error("Nie udało się pobrać misji.");

@@ -4,3 +4,6 @@ export { default as ScaleIn } from "./ScaleIn";
 export { default as SlideLeft } from "./SlideLeft";
 export { default as SlideRight } from "./SlideRight";
 export { default as Stagger } from "./Stagger";
+export { default as Float } from "./Float";
+export { default as Reveal } from "./Reveal";
+export { default as Parallax } from "./Parallax";

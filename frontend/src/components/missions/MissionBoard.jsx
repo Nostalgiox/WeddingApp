@@ -1,25 +1,36 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import MissionTile from "./MissionTile";
 import MissionSheet from "./MissionSheet";
+import BingoCompleteModal from "./BingoCompleteModal";
 
 import puzzleImage from "../../assets/images/5.jpg";
 
 const MissionBoard = () => {
     const [missions, setMissions] = useState([]);
     const [selectedMission, setSelectedMission] = useState(null);
+    const [showBingoComplete, setShowBingoComplete] = useState(false);
 
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
+
     const API_URL = import.meta.env.VITE_API_URL;
+
+    // Zapamiętujemy poprzednią liczbę ukończonych misji.
+    const previousCompletedMissions = useRef(null);
+
     const fetchMissions = async () => {
         try {
             setError(false);
 
-            const response = await fetch(`${API_URL}/api/missions/`);
+            const response = await fetch(
+                `${API_URL}/api/missions/`
+            );
 
             if (!response.ok) {
-                throw new Error("Nie udało się pobrać misji.");
+                throw new Error(
+                    "Nie udało się pobrać misji."
+                );
             }
 
             const data = await response.json();
@@ -29,7 +40,9 @@ const MissionBoard = () => {
             // Jeśli Bottom Sheet jest otwarty,
             // aktualizujemy również jego dane.
             setSelectedMission((currentMission) => {
-                if (!currentMission) return null;
+                if (!currentMission) {
+                    return null;
+                }
 
                 return (
                     data.find(
@@ -54,6 +67,40 @@ const MissionBoard = () => {
         (mission) =>
             mission.currentPhotos >= mission.requiredPhotos
     ).length;
+
+    /*
+     * Wykrywanie ukończenia całego bingo.
+     *
+     * Popup pojawi się tylko wtedy, gdy:
+     *
+     * wcześniej nie było 16/16
+     *             ↓
+     * teraz jest 16/16
+     *
+     * Dzięki temu nie pojawi się ponownie
+     * przy każdym wejściu na stronę.
+     */
+    useEffect(() => {
+        if (
+            missions.length === 0 ||
+            completedMissions < missions.length
+        ) {
+            previousCompletedMissions.current =
+                completedMissions;
+
+            return;
+        }
+
+        if (
+            previousCompletedMissions.current !== null &&
+            previousCompletedMissions.current < missions.length
+        ) {
+            setShowBingoComplete(true);
+        }
+
+        previousCompletedMissions.current =
+            completedMissions;
+    }, [completedMissions, missions.length]);
 
     if (loading) {
         return (
@@ -189,10 +236,19 @@ const MissionBoard = () => {
 
             </div>
 
+            {/* BOTTOM SHEET MISJI */}
+            
             <MissionSheet
                 mission={selectedMission}
                 onClose={() => setSelectedMission(null)}
                 onUploaded={fetchMissions}
+            />
+
+            {/* GRATULACJE ZA UKOŃCZENIE BINGO */}
+
+            <BingoCompleteModal
+                open={showBingoComplete}
+                onClose={() => setShowBingoComplete(false)}
             />
 
         </section>

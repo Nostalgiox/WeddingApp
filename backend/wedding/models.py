@@ -42,16 +42,59 @@ class Photo(models.Model):
         return f"Zdjęcie #{self.id}"
 
 class Wish(models.Model):
-    author = models.CharField(max_length=100, blank=True,)
-    content = models.TextField(max_length=2000,)
-    is_anonymous = models.BooleanField(default=False,)
-    is_visible = models.BooleanField(default=True,)
-    created_at = models.DateTimeField(auto_now_add=True,)
+    author = models.CharField(
+        max_length=100,
+        blank=True,
+    )
+
+    content = models.TextField(
+        max_length=2000,
+        blank=True,
+    )
+
+    audio = models.FileField(
+        upload_to="wishes/audio/%Y/%m/%d/",
+        blank=True,
+        null=True,
+    )
+
+    is_anonymous = models.BooleanField(
+        default=False,
+    )
+
+    is_visible = models.BooleanField(
+        default=True,
+    )
+
+    created_at = models.DateTimeField(
+        auto_now_add=True,
+    )
 
     class Meta:
         ordering = ["-created_at"]
 
-        def __str__(self):
-            if self.is_anonymous:
-                return f"Anonimowy gość - #{self.id}"
-            return f"{self.author} - #{self.id}"
+    def __str__(self):
+        if self.is_anonymous:
+            return f"Anonimowy gość - #{self.id}"
+
+        return f"{self.author} - #{self.id}"
+        
+class BingoSettings(models.Model):
+    reveal_image = models.ImageField(
+        upload_to="bingo/",
+        blank=True,
+        null=True,
+    )
+
+    updated_at = models.DateTimeField(
+        auto_now=True
+    )
+
+    def __str__(self):
+        return "Ustawienia bingo"
+
+class RewardCounter(models.Model):
+    claimed_rewards = models.PositiveIntegerField(default=0)
+
+    def __str__(self):
+        return f"Odebrane nagrody: {self.claimed_rewards}"

@@ -14,7 +14,7 @@ import AdminMissionsPage from "../admin/pages/AdminMissionsPage";
 import AdminLoginPage from "../admin/pages/AdminLoginPage";
 import ProtectedAdminRoute from "../admin/components/ProtectedAdminRoute";
 import AdminWishesPage from "../admin/pages/AdminWishesPage";
-
+import AdminRewardsPage from "../admin/pages/AdminRewardsPage";
 const AppRouter = () => {
     return (
         <BrowserRouter>
@@ -48,6 +48,8 @@ const AppRouter = () => {
                     path="/missions"
                     element={<MissionsPage />}
                 />
+
+
 
 
                 {/* ========================= */}
@@ -90,6 +92,11 @@ const AppRouter = () => {
                             path="wishes"
                             element={<AdminWishesPage />}
                         />
+                        
+                      <Route
+                        path="rewards"
+                        element={<AdminRewardsPage />}
+                    />
 
                     </Route>
 

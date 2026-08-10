@@ -4,7 +4,9 @@ from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 
-from .models import Mission, Photo, Wish
+from django.db.models import F
+from rest_framework.permissions import IsAdminUser
+from .models import Mission, Photo, Wish, RewardCounter
 from .serializers import (
     MissionSerializer,
     PhotoSerializer,
@@ -164,3 +166,40 @@ class AdminWishDetailView(
 
     def get_queryset(self):
         return Wish.objects.all()
+
+    def perform_destroy(self, instance):
+        audio = instance.audio
+
+        instance.delete()
+
+        if audio:
+            audio.delete(save=False)
+            
+class AdminRewardCounterView(generics.RetrieveAPIView):
+    permission_classes = [IsAdminUser]
+
+    def get(self, request, *args, **kwargs):
+        counter, created = RewardCounter.objects.get_or_create(
+            pk=1
+        )
+
+        return Response({
+            "claimedRewards": counter.claimed_rewards,
+        })
+
+    def post(self, request, *args, **kwargs):
+        counter, created = RewardCounter.objects.get_or_create(
+            pk=1
+        )
+
+        RewardCounter.objects.filter(
+            pk=counter.pk
+        ).update(
+            claimed_rewards=F("claimed_rewards") + 1
+        )
+
+        counter.refresh_from_db()
+
+        return Response({
+            "claimedRewards": counter.claimed_rewards,
+        })

@@ -48,6 +48,7 @@ class WishSerializer(serializers.ModelSerializer):
             "id",
             "author",
             "content",
+            "audio",
             "is_anonymous",
             "created_at",
         ]
@@ -73,14 +74,20 @@ class WishSerializer(serializers.ModelSerializer):
             "",
         ).strip()
 
+        audio = attrs.get(
+            "audio",
+            None,
+        )
+
         # =========================
-        # TREŚĆ
+        # TEKST LUB AUDIO
         # =========================
 
-        if not content:
+        if not content and not audio:
             raise serializers.ValidationError({
                 "content": (
-                    "Treść życzeń nie może być pusta."
+                    "Dodaj treść życzeń "
+                    "lub nagraj wiadomość głosową."
                 )
             })
 
@@ -118,6 +125,7 @@ class AdminWishSerializer(serializers.ModelSerializer):
             "id",
             "author",
             "content",
+            "audio",
             "is_anonymous",
             "is_visible",
             "created_at",
@@ -127,6 +135,7 @@ class AdminWishSerializer(serializers.ModelSerializer):
             "id",
             "author",
             "content",
+            "audio",
             "is_anonymous",
             "created_at",
         ]

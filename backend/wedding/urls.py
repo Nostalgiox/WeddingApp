@@ -9,6 +9,7 @@ from .views import (
     AdminPhotoDetailView,
     AdminWishListView,
     AdminWishDetailView,
+    AdminRewardCounterView,
 )
 
 
@@ -68,4 +69,10 @@ urlpatterns = [
         AdminWishDetailView.as_view(),
         name="admin-wish-detail",
     ),
+    
+    path(
+    "admin/rewards/",
+    AdminRewardCounterView.as_view(),
+    name="admin-reward-counter",
+),
 ]

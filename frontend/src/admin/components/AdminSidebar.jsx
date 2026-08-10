@@ -5,6 +5,7 @@ import {
     Images,
     Target,
     Heart,
+    Gift,
     LogOut,
 } from "lucide-react";
 
@@ -29,6 +30,11 @@ const navigation = [
         name: "Życzenia",
         path: "/admin-panel/wishes",
         icon: Heart,
+    },
+    {
+        name: "Nagrody",
+        path: "/admin-panel/rewards",
+        icon: Gift,
     },
 ];
 

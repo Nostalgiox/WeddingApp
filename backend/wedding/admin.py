@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Mission, Photo
+from .models import Mission, Photo, BingoSettings, RewardCounter
 # Register your models here.
 
 @admin.register(Mission)
@@ -24,3 +24,16 @@ class PhotoAdmin(admin.ModelAdmin):
     )
 
     list_filter = ("mission", "created_at")
+
+@admin.register(BingoSettings)
+class BingoSettingsAdmin(admin.ModelAdmin):
+    list_display = [
+        "id",
+        "updated_at",
+    ]
+
+@admin.register(RewardCounter)
+class RewardCounterAdmin(admin.ModelAdmin):
+    list_display = [
+        "claimed_rewards",
+    ]

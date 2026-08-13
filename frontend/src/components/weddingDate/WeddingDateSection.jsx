@@ -1,5 +1,5 @@
 import date1 from "../../assets/images/1.jpg";
-import date2 from "../../assets/images/2.jpg";
+import date2 from "../../assets/images/4.jpg";
 import date3 from "../../assets/images/6.jpg";
 import { motion } from "framer-motion";
 import {

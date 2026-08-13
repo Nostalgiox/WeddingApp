@@ -4,7 +4,7 @@ import MissionTile from "./MissionTile";
 import MissionSheet from "./MissionSheet";
 import BingoCompleteModal from "./BingoCompleteModal";
 
-import puzzleImage from "../../assets/images/5.jpg";
+import puzzleImage from "../../assets/images/last_mission.jpg";
 
 const MissionBoard = () => {
     const [missions, setMissions] = useState([]);

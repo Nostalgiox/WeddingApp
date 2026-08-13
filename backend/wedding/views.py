@@ -11,6 +11,7 @@ from .serializers import (
     MissionSerializer,
     PhotoSerializer,
     WishSerializer,
+    AdminMissionSerializer,
 )
 
 from .serializers import (
@@ -74,6 +75,30 @@ class MissionListView(
     queryset = Mission.objects.all()
     serializer_class = MissionSerializer
 
+# =========================
+# ADMIN - MISJE
+# =========================
+
+class AdminMissionListView(
+    generics.ListAPIView
+):
+    serializer_class = AdminMissionSerializer
+    permission_classes = [IsAdminUser]
+
+    def get_queryset(self):
+        return Mission.objects.all().order_by(
+            "order"
+        )
+
+
+class AdminMissionDetailView(
+    generics.RetrieveUpdateAPIView
+):
+    serializer_class = AdminMissionSerializer
+    permission_classes = [IsAdminUser]
+
+    def get_queryset(self):
+        return Mission.objects.all()
 
 # =========================
 # ZDJĘCIA
@@ -199,6 +224,19 @@ class AdminRewardCounterView(generics.RetrieveAPIView):
         )
 
         counter.refresh_from_db()
+
+        return Response({
+            "claimedRewards": counter.claimed_rewards,
+        })
+    def delete(self, request, *args, **kwargs):
+        counter, created = RewardCounter.objects.get_or_create(
+            pk=1
+        )
+
+        counter.claimed_rewards = 0
+        counter.save(
+            update_fields=["claimed_rewards"]
+        )
 
         return Response({
             "claimedRewards": counter.claimed_rewards,

@@ -30,6 +30,31 @@ class MissionSerializer(serializers.ModelSerializer):
             "order",
         ]
 
+class AdminMissionSerializer(serializers.ModelSerializer):
+    currentPhotos = serializers.IntegerField(
+        source="current_photos",
+        read_only=True,
+    )
+
+    requiredPhotos = serializers.IntegerField(
+        source="required_photos",
+    )
+
+    class Meta:
+        model = Mission
+        fields = [
+            "id",
+            "title",
+            "icon",
+            "requiredPhotos",
+            "currentPhotos",
+            "order",
+        ]
+
+        read_only_fields = [
+            "id",
+            "currentPhotos",
+        ]
 
 class PhotoSerializer(serializers.ModelSerializer):
     class Meta:

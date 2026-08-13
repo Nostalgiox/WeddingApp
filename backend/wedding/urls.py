@@ -10,6 +10,8 @@ from .views import (
     AdminWishListView,
     AdminWishDetailView,
     AdminRewardCounterView,
+    AdminMissionListView,
+    AdminMissionDetailView,
 )
 
 
@@ -71,8 +73,19 @@ urlpatterns = [
     ),
     
     path(
-    "admin/rewards/",
-    AdminRewardCounterView.as_view(),
-    name="admin-reward-counter",
-),
+        "admin/rewards/",
+        AdminRewardCounterView.as_view(),
+        name="admin-reward-counter",
+    ),
+    path(
+        "admin/missions/",
+        AdminMissionListView.as_view(),
+        name="admin-mission-list",
+    ),
+
+    path(
+        "admin/missions/<int:pk>/",
+        AdminMissionDetailView.as_view(),
+        name="admin-mission-detail",
+    ),
 ]

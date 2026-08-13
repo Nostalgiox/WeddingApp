@@ -3,6 +3,8 @@ services:
     build:
       context: ./backend
     container_name: weddingapp-backend
+    env_file:
+      - .env
     expose:
       - "8000"
     volumes:
@@ -16,6 +18,8 @@ services:
     container_name: weddingapp-frontend
     ports:
       - "80:80"
+    volumes:
+      - ./backend/media:/usr/share/nginx/html/media:ro
     depends_on:
       - backend
     restart: unless-stopped

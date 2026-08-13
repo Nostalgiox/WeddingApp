@@ -1,101 +1,29 @@
-# 💍 Sandra & Dawid — WeddingApp
+# WeddingApp
 
-A mobile-first wedding application created for Sandra and Dawid's wedding on **22.08.2026**.
+A mobile-first web application designed for wedding guests to share photos, leave wishes, record voice messages, and complete photo-based wedding missions.
 
-The application allows wedding guests to create a shared digital memory by uploading photos, recording voice messages, leaving wishes, and completing special **Wedding Missions**.
+The project is built with React and Django and is designed to work well on mobile devices while remaining easy to deploy with Docker.
 
----
+## Features
 
-## ✨ Features
+- 📸 Shared photo gallery
+- 📷 Photo uploads from a device gallery or camera
+- 💌 Text and anonymous wishes
+- 🎙️ Voice-message recording and playback
+- 🎯 Photo-based wedding missions with progress tracking
+- 🖼️ Shared media storage
+- 🔐 Separate administration interface
+- 📱 Mobile-first responsive interface
+- 🐳 Docker-based production deployment
+- ⚡ Nginx + Gunicorn deployment architecture
 
-### 📸 Photo Gallery
-
-Guests can:
-
-- Upload photos from their phone gallery
-- Take photos directly using their device camera
-- Browse the shared wedding gallery
-- Upload photos without logging in
-
-Uploaded photos are stored by the backend in the `media/` directory.
-
----
-
-### 🎙️ Voice Messages
-
-Guests can record and upload voice messages.
-
-The application uses:
-
-- WebM
-- Opus
-- FFmpeg
-
-Uploaded WebM files are processed by the backend using FFmpeg to ensure that correct duration metadata is available.
-
-This allows the frontend to display the actual recording duration:
-
-```text
-00:08 / 00:08
-```
-
-instead of:
-
-```text
-00:08 / 00:00
-```
-
-The audio stream is copied without re-encoding, so the original audio quality is preserved.
-
----
-
-### 💌 Wedding Wishes
-
-Guests can leave:
-
-- Text wishes
-- Voice messages
-- Signed wishes
-- Anonymous wishes
-
-A wish can contain either text or an audio recording.
-
----
-
-### 🎯 Wedding Missions
-
-The application contains a collection of special wedding photography missions.
-
-Current missions include:
-
-- 💃 First Dance
-- 🎂 Wedding Cake
-- 🤳 Selfie with the Newlyweds
-- 🥂 Toast
-- 🕺 Best Dance
-- 💐 Bouquet
-- 🎧 DJ / Band
-- ✨ Decorations
-- 👨‍👩‍👧 Family
-- ❤️ Friends
-- 👶 Youngest Guest
-- 👴 Oldest Guest
-- 💍 Wedding Rings
-- 🍰 Dessert Table
-- 🌅 Sunset
-- 📸 Best Memory
-
-Each mission has a required number of photos and displays the current progress.
-
----
-
-## 🛠️ Technologies
+## Tech Stack
 
 ### Frontend
 
-- React 19
+- React
 - Vite
-- Tailwind CSS 4
+- Tailwind CSS
 - Framer Motion
 - React Router
 - Axios
@@ -105,18 +33,17 @@ Each mission has a required number of photos and displays the current progress.
 
 ### Backend
 
-- Python 3.13
-- Django 6
+- Python
+- Django
 - Django REST Framework
 - django-cors-headers
 - Pillow
 - SQLite
 
-### Multimedia
+### Media Processing
 
 - FFmpeg
-- WebM
-- Opus
+- WebM / Opus
 
 ### Deployment
 
@@ -125,49 +52,24 @@ Each mission has a required number of photos and displays the current progress.
 - Nginx
 - Gunicorn
 
----
-
-## 📁 Project Structure
+## Project Structure
 
 ```text
 WeddingApp/
-│
 ├── backend/
 │   ├── backend/
-│   │   ├── settings.py
-│   │   ├── urls.py
-│   │   └── wsgi.py
-│   │
 │   ├── wedding/
-│   │   ├── migrations/
-│   │   ├── models.py
-│   │   ├── serializers.py
-│   │   ├── views.py
-│   │   └── urls.py
-│   │
 │   ├── media/
-│   │   ├── photos/
-│   │   └── wishes/
-│   │
-│   ├── db.sqlite3
-│   ├── Dockerfile
-│   ├── .dockerignore
 │   ├── manage.py
-│   └── requirements.txt
+│   ├── requirements.txt
+│   └── Dockerfile
 │
 ├── frontend/
 │   ├── src/
-│   │   ├── admin/
-│   │   ├── assets/
-│   │   ├── components/
-│   │   ├── pages/
-│   │   └── ...
-│   │
-│   ├── Dockerfile
-│   ├── nginx.conf
 │   ├── package.json
 │   ├── vite.config.js
-│   └── .env.example
+│   ├── nginx.conf
+│   └── Dockerfile
 │
 ├── docker-compose.yml
 ├── start.sh
@@ -175,57 +77,40 @@ WeddingApp/
 └── README.md
 ```
 
----
+## Local Development
 
-# 🚀 Local Development
-
-## Requirements
-
-The following tools are required for local development:
+### Requirements
 
 - Python 3.13+
-- Node.js
-- npm
+- Node.js and npm
 - FFmpeg
-- Docker / Docker Compose (optional when running without Docker)
+- Git
 
----
+Docker is recommended for running the complete application stack.
 
-## 🐍 Backend — Django
+### Backend
 
-Go to the backend directory:
+Create and activate a virtual environment:
 
 ```bash
 cd backend
-```
-
-Create a virtual environment:
-
-```bash
 python -m venv venv
-```
-
-Activate it.
-
-### Linux
-
-```bash
 source venv/bin/activate
 ```
 
-### Windows
+On Windows:
 
 ```powershell
 venv\Scripts\activate
 ```
 
-Install Python dependencies:
+Install dependencies:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-Run migrations:
+Apply migrations:
 
 ```bash
 python manage.py migrate
@@ -237,53 +122,44 @@ Start Django:
 python manage.py runserver
 ```
 
-The backend will be available at:
+The API will be available at:
 
 ```text
 http://127.0.0.1:8000
 ```
 
----
-
-# ⚛️ Frontend — React
-
-Go to the frontend directory:
-
-```bash
-cd frontend
-```
+### Frontend
 
 Install dependencies:
 
 ```bash
+cd frontend
 npm install
 ```
 
-Start the Vite development server:
+Start the development server:
 
 ```bash
 npm run dev
 ```
 
-To make the application accessible from other devices on the same local network:
+To make the development server accessible from other devices on the same local network:
 
 ```bash
 npm run dev -- --host
 ```
 
-The frontend will normally be available at:
+The development frontend is normally available at:
 
 ```text
 http://localhost:5173
 ```
 
----
+## Environment Variables
 
-# ⚙️ Environment Configuration
+Environment-specific configuration should be kept outside the repository.
 
-## Development
-
-The development frontend uses:
+For local development, create:
 
 ```text
 frontend/.env
@@ -295,539 +171,212 @@ Example:
 VITE_API_URL=http://127.0.0.1:8000
 ```
 
-When accessing the application from a phone on the same local network, use the computer's local IP address:
+For a device on the same local network, use the development machine's local address instead.
+
+For production, the frontend uses relative `/api/` and `/media/` paths through Nginx, so no public backend URL needs to be embedded in the frontend build.
+
+### Backend Environment
+
+The backend supports environment-based configuration for values such as:
 
 ```env
-VITE_API_URL=http://192.168.x.x:8000
-```
-
-Replace the address with the actual local IP address of the development machine.
-
----
-
-## Production
-
-Production uses:
-
-```text
-frontend/.env.production
-```
-
-The production configuration intentionally uses an empty API URL:
-
-```env
-VITE_API_URL=
-```
-
-This allows the frontend to use relative URLs:
-
-```text
-/api/...
-/media/...
-```
-
-Nginx then routes API requests to the Django backend.
-
----
-
-# 🐳 Docker
-
-The project includes a complete Docker Compose configuration.
-
-Start the application with:
-
-```bash
-docker compose up -d --build
-```
-
-Check the running containers:
-
-```bash
-docker compose ps
-```
-
-The application consists of two containers:
-
-```text
-weddingapp-backend
-weddingapp-frontend
-```
-
-The frontend is available at:
-
-```text
-http://localhost
-```
-
----
-
-## 🏗️ Docker Containers
-
-### Backend
-
-The Django backend runs using:
-
-```text
-Gunicorn
-```
-
-inside the backend container.
-
-The application listens on:
-
-```text
-8000
-```
-
-The backend does not need to expose port 8000 directly to the internet.
-
-Nginx communicates with the backend through the internal Docker network.
-
----
-
-### Frontend
-
-The frontend is built using:
-
-```text
-Node.js + Vite
-```
-
-The resulting static files are served using:
-
-```text
-Nginx
-```
-
-Nginx listens on:
-
-```text
-80
-```
-
----
-
-# 🌐 Nginx
-
-Nginx is responsible for serving the frontend and routing requests.
-
-### Frontend
-
-```text
-/
-```
-
-### Backend API
-
-```text
-/api/
-```
-
-API requests are forwarded to:
-
-```text
-backend:8000
-```
-
-### Media
-
-```text
-/media/
-```
-
-Media files are served directly by Nginx from the shared `backend/media/` directory.
-
-This includes:
-
-- Photos
-- Voice messages
-- Other uploaded media
-
----
-
-## 📤 File Uploads
-
-The Nginx upload limit is currently set to:
-
-```nginx
-client_max_body_size 10M;
-```
-
-This allows guests to upload reasonably large photos and other media while preventing excessively large requests.
-
----
-
-# 🎙️ Voice Message Processing
-
-Voice messages are recorded directly in the browser and uploaded as WebM files.
-
-The backend uses:
-
-```text
-FFmpeg
-```
-
-to process uploaded audio files.
-
-The audio stream is copied without re-encoding:
-
-```text
--c:a copy
-```
-
-This preserves the original audio quality while ensuring that the resulting WebM file contains correct duration metadata.
-
----
-
-# 🗄️ Database
-
-The application uses:
-
-```text
-SQLite
-```
-
-The database file is:
-
-```text
-backend/db.sqlite3
-```
-
-Docker Compose mounts the database into the backend container:
-
-```yaml
-volumes:
-  - ./backend/db.sqlite3:/app/db.sqlite3
-```
-
-This ensures that rebuilding or recreating the backend container does not remove the database.
-
----
-
-# 📂 Media Storage
-
-Uploaded files are stored in:
-
-```text
-backend/media/
-```
-
-Example structure:
-
-```text
-backend/media/
-├── photos/
-│   └── 2026/
-│       └── 08/
-│           └── 02/
-│               └── image.jpg
-│
-└── wishes/
-    └── audio/
-        └── 2026/
-            └── 08/
-                └── 13/
-                    └── wish.webm
-```
-
-The media directory is mounted into the containers where required.
-
-This ensures that uploaded files survive Docker container recreation.
-
----
-
-# 🔄 Updating the Application
-
-When the application is already deployed on a server, pull the latest changes:
-
-```bash
-git pull
-```
-
-Then rebuild and restart the containers:
-
-```bash
-docker compose up -d --build
-```
-
-Check the status:
-
-```bash
-docker compose ps
-```
-
----
-
-# 🗃️ Database Changes
-
-Not every database change requires a migration.
-
-### Changing existing data
-
-For example, changing the title of an existing mission does not require a migration.
-
-Only the database data changes.
-
----
-
-### Changing Django Models
-
-If the Django model structure is changed, for example by adding a new field:
-
-```python
-class Wish(models.Model):
-    ...
-    new_field = models.CharField(...)
-```
-
-create a migration:
-
-```bash
-python manage.py makemigrations
-```
-
-Then apply it:
-
-```bash
-python manage.py migrate
-```
-
-The migration files must be committed to Git.
-
-When deploying the update to the production server, the migrations must also be applied there.
-
----
-
-# 📦 Production Deployment
-
-The project is designed so that deployment to another server requires minimal configuration.
-
-## 1. Clone the repository
-
-```bash
-git clone <REPOSITORY_URL>
-cd WeddingApp
-```
-
-For an existing installation:
-
-```bash
-git pull
-```
-
----
-
-## 2. Create the production `.env`
-
-Create:
-
-```text
-.env
-```
-
-in the project root.
-
-Example:
-
-```env
-SECRET_KEY=YOUR_PRODUCTION_SECRET_KEY
+SECRET_KEY=your-secret-key
 DEBUG=False
 ALLOWED_HOSTS=example.com
 CORS_ALLOWED_ORIGINS=https://example.com
 ```
 
-Adjust the values according to the server and domain configuration.
+**Never commit real secrets, passwords, tokens, private keys, or production `.env` files to the repository.**
 
-The `.env` file must not be committed to the repository.
+## Docker
 
----
-
-## 3. Start the application
+The application can be built and started using Docker Compose:
 
 ```bash
 docker compose up -d --build
 ```
 
-Check the containers:
+Check the running services:
 
 ```bash
 docker compose ps
 ```
 
----
-
-# 🔐 Security
-
-For production deployments:
-
-- Use `DEBUG=False`
-- Use a unique production `SECRET_KEY`
-- Configure `ALLOWED_HOSTS`
-- Configure `CORS_ALLOWED_ORIGINS`
-- Never commit `.env`
-- Keep regular backups of `db.sqlite3`
-- Keep regular backups of `backend/media/`
-- Use HTTPS when exposing the application publicly
-
----
-
-# 💾 Backups
-
-The most important application data is stored in:
-
-```text
-backend/db.sqlite3
-backend/media/
-```
-
-Both locations should be included in backups.
-
-Backing up only the Git repository is **not sufficient**, because the database and uploaded media are intentionally excluded from Git.
-
----
-
-# 🧪 Useful Docker Commands
-
-### Start
-
-```bash
-docker compose up -d
-```
-
-### Build and start
-
-```bash
-docker compose up -d --build
-```
-
-### Stop
+Stop the application:
 
 ```bash
 docker compose down
 ```
 
-### Check status
-
-```bash
-docker compose ps
-```
-
-### Backend logs
+View backend logs:
 
 ```bash
 docker compose logs -f backend
 ```
 
-### Frontend logs
+View frontend logs:
 
 ```bash
 docker compose logs -f frontend
 ```
 
-### Enter the backend container
-
-```bash
-docker compose exec backend bash
-```
-
-### Check FFmpeg
-
-```bash
-docker compose run --rm backend ffmpeg -version
-```
-
----
-
-# 🧪 API Testing
-
-Check the wedding missions:
-
-```bash
-curl http://localhost/api/missions/
-```
-
-Example response:
-
-```json
-[
-  {
-    "id": 1,
-    "title": "First Dance",
-    "icon": "💃",
-    "requiredPhotos": 5,
-    "currentPhotos": 1,
-    "order": 1
-  }
-]
-```
-
----
-
-# 🖼️ Media Testing
-
-Test a photo:
-
-```bash
-curl -I http://localhost/media/photos/2026/08/02/image.jpg
-```
-
-Test a voice message:
-
-```bash
-curl -I http://localhost/media/wishes/audio/2026/08/13/wish.webm
-```
-
-A successfully served file should return:
+The production architecture is:
 
 ```text
-HTTP/1.1 200 OK
+                    Client
+                      │
+                      ▼
+                 ┌─────────┐
+                 │  Nginx  │
+                 │   :80   │
+                 └────┬────┘
+                      │
+             ┌────────┴────────┐
+             │                 │
+             ▼                 ▼
+          Frontend          Django API
+             │              + Gunicorn
+             │                 │
+             │                 ▼
+             │              SQLite
+             │
+             └────── /media ────► Media storage
 ```
 
----
+Nginx serves the compiled frontend, forwards `/api/` requests to Django, and serves uploaded media through `/media/`.
 
-# 🔀 Application Architecture
+## Database and Media
+
+The default development database is SQLite.
+
+Uploaded files are stored under:
 
 ```text
-                         INTERNET
-                            │
-                            ▼
-                     ┌─────────────┐
-                     │    NGINX    │
-                     │     :80     │
-                     └──────┬──────┘
-                            │
-                 ┌──────────┼──────────┐
-                 │          │          │
-                 ▼          ▼          ▼
-              Frontend     /api/     /media/
-                 │          │          │
-                 │          ▼          │
-                 │       Django        │
-                 │       Gunicorn      │
-                 │          │          │
-                 │          ▼          │
-                 │       SQLite        │
-                 │                     │
-                 └─────────────────────┘
-                            │
-                            ▼
-                       backend/media
+backend/media/
 ```
 
----
+The database and uploaded media are application data rather than source code and should be handled separately from Git.
 
-# 👰🤵 Wedding
+For production deployments, make sure the database and media directory are backed up appropriately.
 
-**Sandra & Dawid**
+## Database Migrations
 
-📅 **22.08.2026**
+When changing Django models:
 
-WeddingApp was created as a digital wedding memory, allowing guests to collectively create a gallery, leave wishes, record voice messages, and complete Wedding Missions.
+```bash
+python manage.py makemigrations
+python manage.py migrate
+```
 
----
+Migration files should be committed to Git.
 
-## 📜 License
+When deploying a version containing new migrations, apply them in the deployment environment before using the updated application.
 
-Private project created for Sandra and Dawid's wedding.
+Changes to existing records, such as editing the text of a mission, do not normally require a new migration.
 
-Not intended for public distribution or commercial use without the author's permission.
+## Voice Messages
+
+Voice messages are recorded in the browser and uploaded as WebM audio.
+
+FFmpeg is used by the backend to process uploaded recordings and ensure that duration metadata is available for reliable playback information.
+
+The audio stream is copied rather than re-encoded, avoiding unnecessary quality loss.
+
+## File Uploads
+
+The production Nginx configuration allows uploads up to the configured request-size limit.
+
+If the upload limit needs to be changed, update the Nginx configuration and rebuild the frontend container:
+
+```bash
+docker compose up -d --build
+```
+
+## Administration
+
+The application contains a separate administration area for managing application content and submitted wishes.
+
+Administrative access should only be exposed to authorized users.
+
+Production deployments should use HTTPS and appropriate access controls.
+
+## Deployment
+
+A typical deployment workflow is:
+
+```bash
+git pull
+docker compose up -d --build
+```
+
+After deployment, verify the services:
+
+```bash
+docker compose ps
+```
+
+and inspect logs if necessary:
+
+```bash
+docker compose logs -f backend
+docker compose logs -f frontend
+```
+
+The production environment must provide its own configuration values through environment variables.
+
+## Security
+
+For production use:
+
+- Keep `DEBUG=False`
+- Use a unique production `SECRET_KEY`
+- Configure `ALLOWED_HOSTS`
+- Configure `CORS_ALLOWED_ORIGINS`
+- Do not commit `.env` files containing secrets
+- Do not commit databases containing private event data
+- Do not commit uploaded photos or recordings
+- Use HTTPS for public deployments
+- Restrict administrative access
+- Maintain backups of application data
+
+## Development Commands
+
+### Frontend
+
+```bash
+npm install
+npm run dev
+npm run build
+npm run lint
+```
+
+### Backend
+
+```bash
+python manage.py runserver
+python manage.py migrate
+python manage.py makemigrations
+```
+
+### Docker
+
+```bash
+docker compose up -d --build
+docker compose ps
+docker compose logs -f
+docker compose down
+```
+
+## Privacy
+
+Wedding photos, wishes, voice messages, and other uploaded content may contain personal information.
+
+If the application is deployed publicly, access to uploaded content and administrative functionality should be configured according to the privacy requirements of the event.
+
+Do not include real guest data, private media, credentials, or other sensitive information in the public repository.
+
+## License
+
+This project is provided for personal and educational use.
+
+If you intend to reuse or distribute the project, review and adapt the license terms to the intended use.

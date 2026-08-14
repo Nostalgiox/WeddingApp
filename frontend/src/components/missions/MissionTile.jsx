@@ -41,12 +41,12 @@ const MissionTile = ({
     const positionY = (row / 3) * 100;
 
     // Stopniowe odkrywanie zdjęcia
-    const maxBlur = 10;
+    const maxBlur = 35;
     const blur = maxBlur * (1 - progress);
 
     const brightness = 0.35 + progress * 0.65;
 
-    const overlayOpacity = 0.45 * (1 - progress);
+    const overlayOpacity = 0.65 * (1 - progress);
 
     return (
         <motion.button

@@ -30,6 +30,7 @@ class MissionSerializer(serializers.ModelSerializer):
             "order",
         ]
 
+
 class AdminMissionSerializer(serializers.ModelSerializer):
     currentPhotos = serializers.IntegerField(
         source="current_photos",
@@ -56,6 +57,7 @@ class AdminMissionSerializer(serializers.ModelSerializer):
             "currentPhotos",
         ]
 
+
 class PhotoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Photo
@@ -72,14 +74,14 @@ class PhotoSerializer(serializers.ModelSerializer):
         ]
 
 
-def fix_audio_duration(audio_file):
+def convert_audio_to_m4a(audio_file):
     """
-    Przepisuje plik WebM przez FFmpeg bez ponownego
-    kodowania dźwięku. Dzięki temu FFmpeg może zapisać
-    prawidłowe metadane długości pliku.
-    """
+    Konwertuje przesłaną głosówkę do M4A/AAC.
 
-    suffix = os.path.splitext(audio_file.name)[1] or ".webm"
+    Plik wejściowy może być np. WebM/Opus.
+    FFmpeg konwertuje go do AAC w kontenerze M4A,
+    który jest dobrze obsługiwany przez iOS/Safari.
+    """
 
     input_path = None
     output_path = None
@@ -88,6 +90,11 @@ def fix_audio_duration(audio_file):
         # =========================
         # PLIK WEJŚCIOWY
         # =========================
+
+        suffix = (
+            os.path.splitext(audio_file.name)[1]
+            or ".webm"
+        )
 
         with tempfile.NamedTemporaryFile(
             suffix=suffix,
@@ -104,7 +111,7 @@ def fix_audio_duration(audio_file):
         # =========================
 
         output_file = tempfile.NamedTemporaryFile(
-            suffix=".webm",
+            suffix=".m4a",
             delete=False,
         )
 
@@ -112,7 +119,7 @@ def fix_audio_duration(audio_file):
         output_file.close()
 
         # =========================
-        # FFmpeg
+        # FFMPEG
         # =========================
 
         subprocess.run(
@@ -121,14 +128,31 @@ def fix_audio_duration(audio_file):
                 "-y",
                 "-i",
                 input_path,
+
+                # Tylko pierwsza ścieżka audio
                 "-map",
                 "0:a:0",
+
+                # AAC
                 "-c:a",
-                "copy",
-                "-fflags",
-                "+genpts",
+                "aac",
+
+                # Jakość głosu
+                "-b:a",
+                "128k",
+
+                # Wyłączamy niepotrzebne metadane
+                "-map_metadata",
+                "-1",
+
+                # Fast Start
+                "-movflags",
+                "+faststart",
+
+                # Kontener M4A
                 "-f",
-                "webm",
+                "mp4",
+
                 output_path,
             ],
             check=True,
@@ -140,12 +164,32 @@ def fix_audio_duration(audio_file):
         # ODCZYT GOTOWEGO PLIKU
         # =========================
 
-        with open(output_path, "rb") as fixed_file:
-            fixed_data = fixed_file.read()
+        with open(
+            output_path,
+            "rb",
+        ) as converted_file:
+
+            converted_data = converted_file.read()
+
+        # =========================
+        # NOWA NAZWA
+        # =========================
+
+        original_name = os.path.basename(
+            audio_file.name
+        )
+
+        original_name_without_extension = os.path.splitext(
+            original_name
+        )[0]
+
+        new_name = (
+            f"{original_name_without_extension}.m4a"
+        )
 
         return ContentFile(
-            fixed_data,
-            name=audio_file.name,
+            converted_data,
+            name=new_name,
         )
 
     finally:
@@ -153,10 +197,16 @@ def fix_audio_duration(audio_file):
         # CZYSZCZENIE
         # =========================
 
-        if input_path and os.path.exists(input_path):
+        if (
+            input_path
+            and os.path.exists(input_path)
+        ):
             os.remove(input_path)
 
-        if output_path and os.path.exists(output_path):
+        if (
+            output_path
+            and os.path.exists(output_path)
+        ):
             os.remove(output_path)
 
 
@@ -239,15 +289,15 @@ class WishSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         """
-        Przetwarza głosówkę przed zapisaniem jej
-        do media/wishes/audio/...
+        Konwertuje głosówkę do M4A/AAC
+        przed zapisaniem jej na dysku.
         """
 
         audio = validated_data.get("audio")
 
         if audio:
-            validated_data["audio"] = fix_audio_duration(
-                audio
+            validated_data["audio"] = (
+                convert_audio_to_m4a(audio)
             )
 
         return super().create(validated_data)

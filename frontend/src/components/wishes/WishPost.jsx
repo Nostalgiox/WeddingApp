@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import {
     Heart,
     Mic,
@@ -46,7 +46,9 @@ const getAudioUrl = (audio) => {
         audio.startsWith("http://") ||
         audio.startsWith("https://")
     ) {
-        return audio;
+        return window.location.protocol === "https:"
+            ? audio.replace(/^http:/, "https:")
+            : audio;
     }
 
     return `${API_URL}${audio}`;
@@ -57,6 +59,8 @@ const WishPost = ({ wish }) => {
     const [currentTime, setCurrentTime] = useState(0);
     const [duration, setDuration] = useState(0);
 
+    const audioRef = useRef(null);
+
     const author = wish.is_anonymous
         ? "Anonimowy gość"
         : wish.author;
@@ -66,24 +70,51 @@ const WishPost = ({ wish }) => {
         : author?.charAt(0)?.toUpperCase() || "♡";
 
     const audioUrl = getAudioUrl(wish.audio);
+    console.log("WISH AUDIO:", wish.audio);
+    console.log("AUDIO URL:", audioUrl);
 
-    const handlePlay = () => {
-        const audio =
-            document.getElementById(
-                `wish-audio-${wish.id}`
-            );
+    const handlePlay = async () => {
+        const audio = audioRef.current;
 
         if (!audio) return;
 
-        if (audio.paused) {
-            audio.play();
-        } else {
-            audio.pause();
+        try {
+            if (audio.paused) {
+                await audio.play();
+            } else {
+                audio.pause();
+            }
+        } catch (error) {
+            console.error(
+                "Nie udało się odtworzyć głosówki:",
+                error
+            );
+        }
+    };
+
+    const updateDuration = (audio) => {
+        if (!audio) return;
+
+        const newDuration = audio.duration;
+
+        if (
+            Number.isFinite(newDuration) &&
+            newDuration > 0
+        ) {
+            setDuration(newDuration);
         }
     };
 
     const handleLoadedMetadata = (event) => {
-        setDuration(event.currentTarget.duration);
+        updateDuration(event.currentTarget);
+    };
+
+    const handleDurationChange = (event) => {
+        updateDuration(event.currentTarget);
+    };
+
+    const handleCanPlay = (event) => {
+        updateDuration(event.currentTarget);
     };
 
     const handleTimeUpdate = (event) => {
@@ -98,16 +129,11 @@ const WishPost = ({ wish }) => {
     };
 
     const handleSeek = (event) => {
-        const audio =
-            document.getElementById(
-                `wish-audio-${wish.id}`
-            );
+        const audio = audioRef.current;
 
         if (!audio || !duration) return;
 
-        const value = Number(
-            event.target.value
-        );
+        const value = Number(event.target.value);
 
         audio.currentTime = value;
         setCurrentTime(value);
@@ -193,21 +219,17 @@ const WishPost = ({ wish }) => {
                 >
 
                     <audio
-                        id={`wish-audio-${wish.id}`}
-                        src={audioUrl}
-                        preload="metadata"
-                        onLoadedMetadata={
-                            handleLoadedMetadata
-                        }
-                        onTimeUpdate={
-                            handleTimeUpdate
-                        }
-                        onPlay={() =>
-                            setPlaying(true)
-                        }
-                        onPause={() =>
-                            setPlaying(false)
-                        }
+                        ref={audioRef}
+                        src={new URL(audioUrl, window.location.origin).href}
+                        preload="auto"
+                        playsInline
+                        controls
+                        onLoadedMetadata={handleLoadedMetadata}
+                        onDurationChange={handleDurationChange}
+                        onCanPlay={handleCanPlay}
+                        onTimeUpdate={handleTimeUpdate}
+                        onPlay={() => setPlaying(true)}
+                        onPause={() => setPlaying(false)}
                         onEnded={handleEnded}
                     />
 

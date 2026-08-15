@@ -18,8 +18,10 @@ services:
     container_name: weddingapp-frontend
     ports:
       - "80:80"
+      - "443:443"
     volumes:
       - ./backend/media:/usr/share/nginx/html/media:ro
+      - ./nginx/certs:/etc/nginx/certs:ro
     depends_on:
       - backend
     restart: unless-stopped
